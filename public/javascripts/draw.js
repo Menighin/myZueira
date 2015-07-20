@@ -7,7 +7,8 @@ function onMouseDown(event) {
 	
 	path = new Path({
 		segments: [event.point],
-		strokeColor: 'black',
+		strokeColor: strokeColor,
+		strokeWidth: strokeWidth
 	});
 	
 }
@@ -34,13 +35,11 @@ function emitPath() {
     var data = {
         segments: path.segments,
 		strokeColor: path.strokeColor,
+		strokeWidth: strokeWidth
     };
 
     // send a 'drawCircle' event with data and sessionId to the server
     io.emit( 'drawPath', data, sessionId )
-
-    // Lets have a look at the data we're sending
-    console.log( data )
 
 }
 
@@ -49,6 +48,7 @@ function emitPath() {
 io.on( 'drawPath', function( data ) {
 	var receivedPath = new Path({
 		segments: data.segments,
-		strokeColor: data.strokeColor
+		strokeColor: data.strokeColor,
+		strokeWidth: data.strokeWidth
 	});
 })

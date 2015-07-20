@@ -1,8 +1,32 @@
 body {
-  padding: 50px;
+  padding: 30px 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#draw {
+	display: block;
+	margin: 0 auto;
+	width: 1000px;
+	height: 700px;
+	border: 1px black solid;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.tools {
+	display: block;
+	margin: 0 auto;
+	width: 1000px;
+	text-align: center;
+}
+
+.tool {
+	width: 300px;
+	margin: 10px;
+	display: inline-block;
 }

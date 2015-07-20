@@ -1,10 +1,20 @@
 var imageName = getParameterByName('back');
+var strokeWidth = 3;
+var strokeColor = '#000000';
 
 $(document).ready(function() {
 	
 	// Setting background
-	$('#draw').css('background', 'url("/images/' + imageName +'") no-repeat');
+	$('#draw').css('background-image', 'url("/images/' + imageName +'")');
 	
+	// Toolset
+	$('#stroke-width').change(function() {
+		strokeWidth = $(this).val();
+	});
+	
+	$('#stroke-color').change(function() {
+		strokeColor = $(this).val();
+	});
 });
 
 
