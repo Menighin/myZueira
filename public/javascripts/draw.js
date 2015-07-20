@@ -1,5 +1,9 @@
 'use strict';
 
+// Subscribing user to the room
+io.emit('subscribe', imageName);
+
+
 var path;
 
 // Called when user clicks
@@ -27,9 +31,6 @@ function onMouseUp(event) {
 
 // Sends the path to the server
 function emitPath() {
-
-    // Each Socket.IO connection has a unique session id
-    var sessionId = io.io.engine.id;
   
     // An object to describe the circle's draw data
     var data = {
@@ -39,7 +40,7 @@ function emitPath() {
     };
 
     // send a 'drawCircle' event with data and sessionId to the server
-    io.emit( 'drawPath', data, sessionId )
+    io.emit( 'drawPath', data, imageName);
 
 }
 

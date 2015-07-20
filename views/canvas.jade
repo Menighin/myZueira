@@ -1,25 +1,32 @@
-extends layout
-
-block content
-	canvas(id="draw", resize="true")
-	
-	.tools
-	
-		.tool
-			|Stroke width: 
-			select#stroke-width
-				option(value="3") 3px
-				option(value="5") 5px
-				option(value="7") 7px
-				option(value="11") 11px
-				option(value="17") 17px
+doctype html
+html
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		script(src="/socket.io/socket.io.js")
+		script(src="/javascripts/socket.js")
+		script(src="/javascripts/paper.js")
+		script(src="/javascripts/jquery-2.1.4.min.js")
+	body
+		canvas(id="draw", resize="true")
 		
-		.tool
-			|Color: 
-			input#stroke-color(type="color", value="#000000")
-	
-	
-	
-	script(type="text/paperscript", src="javascripts/draw.js", canvas="draw")
-	script(src="/javascripts/canvas.js")
+		.tools
+		
+			.tool
+				|Stroke width: 
+				select#stroke-width
+					option(value="3") 3px
+					option(value="5") 5px
+					option(value="7") 7px
+					option(value="11") 11px
+					option(value="17") 17px
+			
+			.tool
+				|Color: 
+				input#stroke-color(type="color", value="#000000")
+		
+		
+		script(src="/javascripts/canvas.js")
+		script(type="text/paperscript", src="javascripts/draw.js", canvas="draw")
+		
 	

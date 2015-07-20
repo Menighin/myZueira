@@ -16,6 +16,7 @@ var canvas = require('./routes/canvas');
 var app = express();
 app.use(multer({dest:'public/images/'}).single('image'));
 
+// Controllers
 app.get('/images', function(req, res) {
 	
 	var dir = path.join(__dirname, 'public/images');
@@ -61,7 +62,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/canvas', canvas);
-//app.use('/images', images);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -105,7 +105,13 @@ var io = require('socket.io').listen(server, function() {
 // A user connects to the server (opens a socket)
 io.sockets.on('connection', function (socket) {
 	
-	socket.on( 'drawPath', function( data, session ) {
-		 socket.broadcast.emit( 'drawPath', data );
+	socket.on('drawPath', function( data, room) {
+		// socket.broadcast.emit( 'drawPath', data);
+		io.in(room).emit('drawPath', data);
 	});
+	
+	socket.on('subscribe', function(room) {
+		socket.join(room);
+	});
+	
 });
