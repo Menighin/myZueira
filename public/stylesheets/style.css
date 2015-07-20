@@ -18,6 +18,22 @@ a {
 	background-size: contain;
 }
 
+.pic {
+	width: 200px;
+	height: 200px;
+	border: 1px dashed black;
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	margin: 20px;
+	cursor: pointer;
+}
+
+.pic:hover {
+	border: 1px solid black;
+}
+
 .tools {
 	display: block;
 	margin: 0 auto;

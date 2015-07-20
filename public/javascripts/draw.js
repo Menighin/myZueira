@@ -46,10 +46,20 @@ function emitPath() {
 
 // Listen for 'drawCircle' events
 // created by other users
-io.on( 'drawPath', function( data ) {
+io.on('drawPath', function(data) {
 	var receivedPath = new Path({
 		segments: data.segments,
 		strokeColor: data.strokeColor,
 		strokeWidth: data.strokeWidth
 	});
-})
+});
+
+io.on('loadPaths', function(data) {
+	for (var i = 0; i < data.length; i++) {
+		new Path({
+			segments: data[i].segments,
+			strokeColor: data[i].strokeColor,
+			strokeWidth: data[i].strokeWidth
+		});
+	}
+});

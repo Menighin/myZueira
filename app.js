@@ -12,6 +12,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var canvas = require('./routes/canvas');
 
+var database = {};
 
 var app = express();
 app.use(multer({dest:'public/images/'}).single('image'));
@@ -105,13 +106,20 @@ var io = require('socket.io').listen(server, function() {
 // A user connects to the server (opens a socket)
 io.sockets.on('connection', function (socket) {
 	
-	socket.on('drawPath', function( data, room) {
-		// socket.broadcast.emit( 'drawPath', data);
+	socket.on('drawPath', function(data, room) {
+		
+		if (typeof database[room] === 'undefined')
+			database[room] = [];
+		
+		database[room].push(data);
+		
 		io.in(room).emit('drawPath', data);
 	});
 	
 	socket.on('subscribe', function(room) {
 		socket.join(room);
+		if (typeof database[room] != 'undefined' && database[room].length > 0)
+			socket.emit('loadPaths', database[room]);
 	});
 	
 });
