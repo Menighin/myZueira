@@ -1,6 +1,7 @@
 var imageName = getParameterByName('back');
 var strokeWidth = 3;
 var strokeColor = '#000000';
+var selectedTool = 'pencil';
 
 $(document).ready(function() {
 	
@@ -15,12 +16,12 @@ $(document).ready(function() {
 	$('#stroke-color').change(function() {
 		strokeColor = $(this).val();
 	});
+	
+	$('#pencil').click(function() {
+		selectedTool = "pencil";
+	});
+
 });
-
-
-
-
-
 
 // Get URL parameters
 function getParameterByName(name) {

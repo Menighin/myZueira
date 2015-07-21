@@ -103,23 +103,42 @@ var io = require('socket.io').listen(server, function() {
 });
 
 
+function createRoomIfDoesntExists(room) {
+	if (typeof database[room] === 'undefined') {
+		database[room] = {};
+	}
+}
+
 // A user connects to the server (opens a socket)
 io.sockets.on('connection', function (socket) {
 	
 	socket.on('drawPath', function(data, room) {
 		
-		if (typeof database[room] === 'undefined')
-			database[room] = [];
+		createRoomIfDoesntExists(room);
 		
-		database[room].push(data);
+		if (typeof database[room].paths === 'undefined')
+			database[room].paths = [];
 		
-		io.in(room).emit('drawPath', data);
+		database[room].paths.push(data);
+		
+		socket.broadcast.to(room).emit('drawPath', data);
+	});
+	
+	socket.on('drawText', function(data, room) {
+		createRoomIfDoesntExists(room);
+		
+		if (typeof database[room].texts === 'undefined')
+			database[room].texts = [];
+		
+		database[room].texts.push(data);
+		
+		socket.broadcast.to(room).emit('drawText', data);
 	});
 	
 	socket.on('subscribe', function(room) {
 		socket.join(room);
-		if (typeof database[room] != 'undefined' && database[room].length > 0)
-			socket.emit('loadPaths', database[room]);
+		if (typeof database[room] != 'undefined' && database[room].paths.length > 0)
+			socket.emit('loadSaved', database[room]);
 	});
 	
 });

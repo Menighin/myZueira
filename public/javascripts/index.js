@@ -7,7 +7,6 @@ function loadImages() {
 			$('#images').html('');
 			$(data).each(function() {
 				var filename = this.split('/')[2];
-				//$('#images').append('<div class="pic"><a href="/canvas?back=' + filename + '"><img src="http://' + this + '" /></a></div>');
 				$('#images').append('<div class="pic" onclick="openCanvas(\'' + filename + '\')" style="background-image: url(\'http://' + this + '\');"></div>');
 			});
 		}

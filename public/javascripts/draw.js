@@ -4,62 +4,114 @@
 io.emit('subscribe', imageName);
 
 
-var path;
+var path = {};
+var textItem = {};
+
+$('#text').click(function() {
+	var textContent = prompt("Type your text", "");
+	if (textContent != null && textContent.length > 0) {
+		selectedTool = "text";
+		textItem = new PointText({
+			content: textContent,
+			point: new Point(100, 100),
+			fillColor: strokeColor
+		});
+	}
+});
 
 // Called when user clicks
 function onMouseDown(event) {
-	
-	path = new Path({
-		segments: [event.point],
-		strokeColor: strokeColor,
-		strokeWidth: strokeWidth
-	});
-	
+	if (selectedTool == 'pencil') {
+		path = new Path({
+			segments: [event.point],
+			strokeColor: strokeColor,
+			strokeWidth: strokeWidth
+		});
+	}
 }
 
 // Called when user starts to drag
 function onMouseDrag(event) {
-	path.add(event.point);
+	if (selectedTool == 'pencil') {
+		path.add(event.point);
+	} else if (selectedTool == 'text') {
+		textItem.point = event.point;
+	}
 }
 
 // Called when user releases the mouse button
 function onMouseUp(event) {
-	path.simplify(10);
-	
-	emitPath();
+	if (selectedTool == 'pencil') {
+		path.simplify(10);
+		emitPath();
+	} else if (selectedTool == 'text') {
+		selectedTool = 'pencil';
+		emitText(event);
+	}
 }
 
 // Sends the path to the server
 function emitPath() {
-  
-    // An object to describe the circle's draw data
     var data = {
         segments: path.segments,
 		strokeColor: path.strokeColor,
 		strokeWidth: strokeWidth
     };
-
-    // send a 'drawCircle' event with data and sessionId to the server
     io.emit( 'drawPath', data, imageName);
-
 }
 
-// Listen for 'drawCircle' events
-// created by other users
+// Sends the text to the server
+function emitText(e) {
+    var data = {
+        content: textItem.content,
+		point: e.point,
+		fillColor: textItem.fillColor,
+    };
+    io.emit( 'drawText', data, imageName);
+}
+
+// Listen for 'drawPath' events
 io.on('drawPath', function(data) {
-	var receivedPath = new Path({
+	new Path({
 		segments: data.segments,
 		strokeColor: data.strokeColor,
 		strokeWidth: data.strokeWidth
 	});
+	paper.view.draw();
 });
 
-io.on('loadPaths', function(data) {
-	for (var i = 0; i < data.length; i++) {
-		new Path({
-			segments: data[i].segments,
-			strokeColor: data[i].strokeColor,
-			strokeWidth: data[i].strokeWidth
-		});
-	}
+// Listen for 'drawText' events
+io.on('drawText', function(data) {
+	new PointText({
+		content: data.content,
+		point: new Point(data.point[1], data.point[2]),
+		fillColor: data.fillColor
+	});
+	paper.view.draw();
+});
+
+// Getting saved paths
+io.on('loadSaved', function(data) {
+	
+	// Drawing paths
+	if (typeof data.paths !== 'undefined')
+		for (var i = 0; i < data.paths.length; i++) {
+			new Path({
+				segments: data.paths[i].segments,
+				strokeColor: data.paths[i].strokeColor,
+				strokeWidth: data.paths[i].strokeWidth
+			});
+		}
+	
+	// Drawing texts
+	if (typeof data.texts !== 'undefined')
+		for (var i = 0; i < data.texts.length; i++) {
+			new PointText({
+				segments: data.paths[i].segments,
+				fillColor: data.paths[i].fillColor,
+				point: data.paths[i].point
+			});
+		}
+		
+	paper.view.draw()
 });
