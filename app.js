@@ -15,16 +15,16 @@ var canvas = require('./routes/canvas');
 var database = {};
 
 var app = express();
-app.use(multer({dest:'public/images/'}).single('image'));
+app.use(multer({dest:'public/images/upload/'}).single('image'));
 
 // Controllers
 app.get('/images', function(req, res) {
 	
-	var dir = path.join(__dirname, 'public/images');
+	var dir = path.join(__dirname, 'public/images/upload');
 	var images = [];
 	
 	fs.readdirSync(dir).forEach(function(file) {
-		images.push(req.get('host') + '/images/' + file);
+		images.push(req.get('host') + '/images/upload/' + file);
 	});
 	
     res.json(images);
@@ -32,8 +32,8 @@ app.get('/images', function(req, res) {
 
 app.post('/uploadImage', function(req, res) {
 	
-    var tmp_path = path.join(__dirname, 'public/images/' + req.file.filename);
-    var target_path = path.join(__dirname, 'public/images/' + req.file.originalname);
+    var tmp_path = path.join(__dirname, 'public/images/upload/' + req.file.filename);
+    var target_path = path.join(__dirname, 'public/images/upload/' + req.file.originalname);
 	
     // Rename the file
     fs.rename(tmp_path, target_path, function(err) {
@@ -137,7 +137,7 @@ io.sockets.on('connection', function (socket) {
 	
 	socket.on('subscribe', function(room) {
 		socket.join(room);
-		if (typeof database[room] != 'undefined' && database[room].paths.length > 0)
+		if (typeof database[room] != 'undefined')
 			socket.emit('loadSaved', database[room]);
 	});
 	

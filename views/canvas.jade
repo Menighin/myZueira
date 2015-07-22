@@ -8,28 +8,31 @@ html
 		script(src="/javascripts/paper.js")
 		script(src="/javascripts/jquery-2.1.4.min.js")
 	body
-		canvas(id="draw", resize="true")
+	
+		.header
+			h1.blink myZuera
+		.content
+			canvas(id="draw", resize="true")
 		
-		.tools
-		
-			.tool
-				|Stroke width: 
-				select#stroke-width
-					option(value="3") 3px
-					option(value="5") 5px
-					option(value="7") 7px
-					option(value="11") 11px
-					option(value="17") 17px
+			.tools
 			
-			.tool
-				|Color: 
-				input#stroke-color(type="color", value="#000000")
+				.tool
+					img#pencil.b-toggle-on.button(src='/images/brush-icon.png')
+					img#text.b-toggle-off.button(src='/images/text-icon.png')
 				
-			.tool
-				|Tool 
-				button#pencil Pencil 
-				button#text Text
-		
+				.tool
+					input#stroke-color(type="color", value="#000000")
+					
+				.tool
+					|Stroke width: 
+					select#stroke-width
+						option(value="3") 3px
+						option(value="5") 5px
+						option(value="7") 7px
+						option(value="11") 11px
+						option(value="17") 17px
+					
+				
 		
 		script(src="/javascripts/canvas.js")
 		script(type="text/paperscript", src="javascripts/draw.js", canvas="draw")

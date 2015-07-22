@@ -6,8 +6,13 @@ function loadImages() {
 		success: function(data, status) {
 			$('#images').html('');
 			$(data).each(function() {
-				var filename = this.split('/')[2];
-				$('#images').append('<div class="pic" onclick="openCanvas(\'' + filename + '\')" style="background-image: url(\'http://' + this + '\');"></div>');
+				var filename = this.split('/')[3];
+				$('#images').append(
+					'<div class="pic-wrapper">' +
+						'<div class="pic" onclick="openCanvas(\'' + filename + '\')" style="background-image: url(\'http://' + this + '\'); background-color: ' + getRandomColor() + ';"></div>' +
+						'<h3>' + filename + '</h3>' +
+					'</div>'
+				);
 			});
 		}
 	});
@@ -44,3 +49,13 @@ $(document).ready(function() {
     }));
 	
 });
+
+// Generate random colors because why not?
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}

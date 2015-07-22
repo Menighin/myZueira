@@ -109,7 +109,7 @@ io.on('loadSaved', function(data) {
 			new PointText({
 				segments: data.paths[i].segments,
 				fillColor: data.paths[i].fillColor,
-				point: data.paths[i].point
+				point: new Point(data.paths[i].point[1], data.paths[i].point[2])
 			});
 		}
 		
