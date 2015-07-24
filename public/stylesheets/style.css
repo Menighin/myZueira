@@ -31,6 +31,10 @@ h1 {
 	padding: 20px 0;
 }
 
+button {
+	padding: 3px 5px;
+}
+
 #draw {
 	display: block;
 	margin: 0 auto;
@@ -85,18 +89,24 @@ h1 {
 .button {
 	cursor: pointer;
 	margin: 0 10px;
+	border: 1px dashed #999;
 }
 
 .button:hover {
 	border: 1px solid #999;
+	background-color: #eee;
 }
 
-.b-toggle-on {
+.button-active {
 	border: 1px solid black;
 }
 
-.b-toggle-off {
-	border: 1px dashed #999;
+.prop-hidden, .text-hidden{
+	display: none;
+}
+
+.warning {
+	color: red;
 }
 
 /* Going straight to hell for this */

@@ -2,6 +2,8 @@ var imageName = getParameterByName('back');
 var strokeWidth = 3;
 var strokeColor = '#000000';
 var selectedTool = 'pencil';
+var textSize = 22;
+var activeTool = 'pencil';
 
 $(document).ready(function() {
 	
@@ -17,8 +19,20 @@ $(document).ready(function() {
 		strokeColor = $(this).val();
 	});
 	
+	$('#text-size').change(function() {
+		textSize = $(this).val();
+	});
+	
 	$('#pencil').click(function() {
-		selectedTool = "pencil";
+		$('.button').toggleClass('button-active');
+		$('.prop').toggleClass('prop-hidden');
+		activeTool = 'pencil';
+	});
+	
+	$('#text').click(function() {
+		$('.button').toggleClass('button-active');
+		$('.prop').toggleClass('prop-hidden');
+		activeTool = 'text';
 	});
 
 });
@@ -30,6 +44,8 @@ function getParameterByName(name) {
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
+function addText() {alert("oi");}
 
 // Generate random string
 function randomString() {

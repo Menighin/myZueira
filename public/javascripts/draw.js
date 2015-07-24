@@ -7,21 +7,30 @@ io.emit('subscribe', imageName);
 var path = {};
 var textItem = {};
 
-$('#text').click(function() {
-	var textContent = prompt("Type your text", "");
+// On click to add text
+$("#text-add").click(function() {
+	var textContent = $('#text-text').val();
 	if (textContent != null && textContent.length > 0) {
-		selectedTool = "text";
 		textItem = new PointText({
 			content: textContent,
-			point: new Point(100, 100),
-			fillColor: strokeColor
+			point: new Point(50, 50),
+			fillColor: strokeColor,
+			fontSize: textSize
 		});
+		$('.text-control').toggleClass('text-hidden');
 	}
+});
+
+// Finalize text
+$("#text-finalize").click(function() {
+	$('.text-control').toggleClass('text-hidden');
+	emitText(textItem);
+	textItem = {};
 });
 
 // Called when user clicks
 function onMouseDown(event) {
-	if (selectedTool == 'pencil') {
+	if (activeTool == 'pencil') {
 		path = new Path({
 			segments: [event.point],
 			strokeColor: strokeColor,
@@ -32,21 +41,18 @@ function onMouseDown(event) {
 
 // Called when user starts to drag
 function onMouseDrag(event) {
-	if (selectedTool == 'pencil') {
+	if (activeTool == 'pencil') {
 		path.add(event.point);
-	} else if (selectedTool == 'text') {
+	} else if (activeTool == 'text') {
 		textItem.point = event.point;
 	}
 }
 
 // Called when user releases the mouse button
 function onMouseUp(event) {
-	if (selectedTool == 'pencil') {
+	if (activeTool == 'pencil') {
 		path.simplify(10);
 		emitPath();
-	} else if (selectedTool == 'text') {
-		selectedTool = 'pencil';
-		emitText(event);
 	}
 }
 
@@ -66,6 +72,7 @@ function emitText(e) {
         content: textItem.content,
 		point: e.point,
 		fillColor: textItem.fillColor,
+		fontSize: textItem.fontSize
     };
     io.emit( 'drawText', data, imageName);
 }
@@ -85,7 +92,8 @@ io.on('drawText', function(data) {
 	new PointText({
 		content: data.content,
 		point: new Point(data.point[1], data.point[2]),
-		fillColor: data.fillColor
+		fillColor: data.fillColor,
+		fontSize: data.fontSize
 	});
 	paper.view.draw();
 });
@@ -107,9 +115,10 @@ io.on('loadSaved', function(data) {
 	if (typeof data.texts !== 'undefined')
 		for (var i = 0; i < data.texts.length; i++) {
 			new PointText({
-				segments: data.paths[i].segments,
-				fillColor: data.paths[i].fillColor,
-				point: new Point(data.paths[i].point[1], data.paths[i].point[2])
+				content: data.texts[i].content,
+				fillColor: data.texts[i].fillColor,
+				point: new Point(data.texts[i].point[1], data.texts[i].point[2]),
+				fontSize: data.texts[i].fontSize
 			});
 		}
 		

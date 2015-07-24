@@ -16,22 +16,27 @@ html
 		
 			.tools
 			
-				.tool
-					img#pencil.b-toggle-on.button(src='/images/brush-icon.png')
-					img#text.b-toggle-off.button(src='/images/text-icon.png')
+				.tool.text-control
+					img#pencil.button-active.button(src='/images/brush-icon.png')
+					img#text.button(src='/images/text-icon.png')
 				
-				.tool
+				.tool.text-control
 					input#stroke-color(type="color", value="#000000")
 					
-				.tool
+				.tool.prop.text-control
 					|Stroke width: 
-					select#stroke-width
-						option(value="3") 3px
-						option(value="5") 5px
-						option(value="7") 7px
-						option(value="11") 11px
-						option(value="17") 17px
+					input#stroke-width(type='number', value='7', min='1', max='20')
+				
+				.tool.prop.prop-hidden.text-control
+					input#text-text(type='text', placeholder='Your text here')
+				
+				.tool.prop.prop-hidden.text-control
+					|Text size: 
+					input#text-size(type='number', value='22', min='14', max='70')
 					
+				.tool.prop.prop-hidden
+					button#text-add.text-control(type='button') Add text
+					button#text-finalize.text-control.text-hidden(type='button') Finalize text
 				
 		
 		script(src="/javascripts/canvas.js")
